@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>DApp demo</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css"/>
+
+    <script src="web3.min.js"></script>
+    <script src="jquery.slim.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Info Contract</h1>
+
+    <h2 id="info"></h2>
+
+    <label for="name" class="col-lg-2 control-label">Name</label>
+    <input id="name" type="text"/>
+
+    <label for="name" class="col-lg-2 control-label">Age</label>
+    <input id="age" type="text"/>
+
+    <button id="button">Update Info</button>
+</div>
+<script>
+  const ADDR = '0xbD1EB7FeE5213e2eC67E429744aCAE1a3B7E52ea'
+  const ABI = [
+      {
+        constant: true,
+        inputs: [],
+        name: "getInfo",
+        outputs: [
+          {
+            name: "",
+            type: "string",
+          },
+          {
+            name: "",
+            type: "uint256",
+          },
+        ],
+        payable: false,
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        constant: false,
+        inputs: [
+          {
+            name: "_fName",
+            type: "string",
+          },
+          {
+            name: "_age",
+            type: "uint256",
+          },
+        ],
+        name: "setInfo",
+        outputs: [],
+        payable: false,
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: false,
+            name: "name",
+            type: "string",
+          },
+          {
+            indexed: false,
+            name: "age",
+            type: "uint256",
+          },
+        ],
+        name: "Instructor",
+        type: "event",
+      },
+    ]
+
+  ;(async () => {
+    // 设置 web3 实例
+    const web3 = new Web3("ws://localhost:7545")
+
+    // 获取所有的账户，用作后面发起交易时的账户
+    const accounts = await web3.eth.personal.getAccounts();
+
+    // 载入合约
+    const contract = new web3.eth.Contract(ABI, ADDR);
+
+    // 显示当前链上的信息
+    contract.methods.getInfo().call().then(res => {
+      $("#info").html(res[0] + " (" + res[1] + " years old)")
+    });
+
+    // 监听合约事件，每次链上更新时，渲染跟着更新
+    contract.events.Instructor().on("data", function (event) {
+      const {name, age} = event.returnValues;
+      $("#info").html(name + " (" + age + " years old)");
+    })
+
+
+    // 发起一个交易
+    $("#button").click(() => {
+      contract.methods.setInfo($("#name").val(), $("#age").val())
+        .send({from: accounts[0]});
+    });
+  })();
+</script>
+</body>
+</html>
