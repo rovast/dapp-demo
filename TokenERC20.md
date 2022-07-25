@@ -10,3 +10,8 @@
 3. 选择测试网
 4. 部署
 5. 获取到合约地址后，在 metamask 中导入代币即可
+
+
+发行后可在区块链浏览器浏览：
+
+https://ropsten.etherscan.io/token/0xf03fb2cfdb7b23d9631faebc228707930f14d0b8
