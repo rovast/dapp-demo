@@ -13,15 +13,18 @@ DApp 学习手记，用最简单的 demo 来直观了解 DApp。
 
 ---
 
-以下是发行代币和众筹示例
+🕹 以下是发行代币和众筹示例
 
-- TokenERC20.md  为发行代币的合约的示例
-- crowdsale.md  为使用智能合约进行众筹的示例
+- [TokenERC20.md](TokenERC20.md)  为发行代币的合约的示例
+- [crowdsale.md](crowdsale.md)  为使用智能合约进行众筹的示例
 
 
 ---
 
-以下是 web3.js 交互示例
+🕹 以下是 web3.js 交互示例
+
+- [InfoContract.sol](InfoContract.sol) 合约部分
+- [index.html](index.html) web3.js 和合约交互部分
 
 ## 需要安装
 
